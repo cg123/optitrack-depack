@@ -22,10 +22,21 @@ typedef struct {
 } natnet_msg_header_t;
 
 #define MAX_NAMELENGTH 256
+#define MAX_PACKETSIZE 100000
 typedef struct {
     char name[MAX_NAMELENGTH];
-    char app_version[4];
-    char natnet_version[4];
+    unsigned char app_version[4];
+    unsigned char natnet_version[4];
 } natnet_sender_t;
+
+typedef struct {
+    natnet_msg_header_t header;
+    union {
+        unsigned char   byteData [MAX_PACKETSIZE];
+        unsigned int    intData  [MAX_PACKETSIZE / sizeof(unsigned int)];
+        float           floatData[MAX_PACKETSIZE / sizeof(float)];
+        natnet_sender_t sender;
+    } data;
+} natnet_packet_t;
 
 #endif//OPTITRACK_WIRE_H_
