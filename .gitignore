@@ -18,3 +18,11 @@
 
 # CMake output directory
 ./build/
+
+# Unity stuff
+./UnityProject/[Ll]ibrary
+./UnityProject/[Tt]emp
+./UnityProject/[Oo]bj
+./UnityProject/*.csproj
+./UnityProject/*.sln
+./UnityProject/*.pidb
