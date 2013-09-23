@@ -40,3 +40,22 @@ void NatNetClient::SendPacket(uint32_t host, natnet_packet_t* msg)
 		boost::throw_exception(std::runtime_error("Unable to send message"));
 	}
 }
+
+void NatNetClient::ProcessFrame()
+{
+	// Process the command socket
+	ip::udp::endpoint sender;
+	int bytesRead = commandSocket.receive_from(buffer(buf, sizeof(buf)), sender);
+	if (bytesRead > 0)
+	{
+		natnet_packet_t* msg = reinterpret_cast<natnet_packet_t*>(&buf[0]);
+		std::cout << "[Command] Received command from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
+	}
+	// Process the data socket
+	bytesRead = dataSocket.receive_from(buffer(buf, sizeof(buf)), sender);
+	if (bytesRead > 0)
+	{
+		natnet_packet_t* msg = reinterpret_cast<natnet_packet_t*>(&buf[0]);
+		std::cout << "[Data] Received data from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
+	}
+}
