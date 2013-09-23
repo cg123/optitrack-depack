@@ -7,6 +7,7 @@
 class NatNetClient {
 public:
     NatNetClient();
+	~NatNetClient();
     
 	void SendPacket(uint32_t host, natnet_packet_t* msg);
 	void Ping(uint32_t host);

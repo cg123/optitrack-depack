@@ -26,6 +26,11 @@ NatNetClient::NatNetClient() : commandSocket(io), dataSocket(io), valid(false) {
 	dataSocket.set_option(ip::udp::socket::receive_buffer_size(RCVBUF_SIZE));
 }
 
+NatNetClient::~NatNetClient() {
+	commandSocket.close();
+	dataSocket.close();
+}
+
 void NatNetClient::Ping(uint32_t host) {
 	natnet_packet_t packet;
 	packet.header.type = NAT_PING;
