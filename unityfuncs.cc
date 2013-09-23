@@ -1,8 +1,8 @@
 #include "client.h"
 #include "api.h"
 
-EXPORT_FUNC(NatNetClient*) natnetclient_init() {
-    return new NatNetClient();
+EXPORT_FUNC(NatNetClient*) natnetclient_init(uint32_t addr) {
+    return new NatNetClient(addr);
 }
 
 EXPORT_FUNC(void) natnetclient_ping(NatNetClient* self, uint32_t host) {

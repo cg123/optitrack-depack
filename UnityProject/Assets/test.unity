@@ -111,7 +111,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f90fc9da4cf957b41b9ead0ce61c1bfb, type: 3}
   m_Name: 
-  serverIP: 10.26.25.15
+  serverIP: 192.168.1.202
+  localIP: 192.168.1.201
 --- !u!1 &1756691641
 GameObject:
   m_ObjectHideFlags: 0

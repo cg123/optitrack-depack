@@ -9,9 +9,9 @@ using namespace boost::system;
 #define PORT_DATA  			    1511                // Default multicast group
 #define RCVBUF_SIZE				0x100000
 
-NatNetClient::NatNetClient() : commandSocket(io), dataSocket(io), valid(false) {
+NatNetClient::NatNetClient(uint32_t addr) : commandSocket(io), dataSocket(io), valid(false) {
 	// CreateCommandSocket() 
-	ip::udp::endpoint command_ep(ip::address_v4::any(), PORT_COMMAND);
+	ip::udp::endpoint command_ep(ip::address_v4(addr), PORT_COMMAND);
 	commandSocket.open(command_ep.protocol());
 	commandSocket.bind(command_ep);
 	commandSocket.set_option(ip::udp::socket::broadcast(true));
@@ -19,11 +19,16 @@ NatNetClient::NatNetClient() : commandSocket(io), dataSocket(io), valid(false) {
 
 	// Random junk in main()
 	ip::udp::endpoint data_ep(ip::address_v4::any(), PORT_DATA);
-	dataSocket.set_option(ip::udp::socket::reuse_address(true));
+	boost::system::error_code ec;
+	
 	dataSocket.open(data_ep.protocol());
-	dataSocket.bind(data_ep);
-	dataSocket.set_option(ip::multicast::join_group(ip::address::from_string(MULTICAST_ADDRESS)));
-	dataSocket.set_option(ip::udp::socket::receive_buffer_size(RCVBUF_SIZE));
+	dataSocket.set_option(ip::udp::socket::reuse_address(true), ec);
+	if (ec == 0)
+	{
+		dataSocket.bind(data_ep);
+		dataSocket.set_option(ip::multicast::join_group(ip::address::from_string(MULTICAST_ADDRESS)));
+		dataSocket.set_option(ip::udp::socket::receive_buffer_size(RCVBUF_SIZE));
+	}
 }
 
 NatNetClient::~NatNetClient() {
@@ -54,13 +59,13 @@ void NatNetClient::ProcessFrame()
 	if (bytesRead > 0)
 	{
 		natnet_packet_t* msg = reinterpret_cast<natnet_packet_t*>(&buf[0]);
-		std::cout << "[Command] Received command from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
+		std::cerr << "[Command] Received command from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
 	}
 	// Process the data socket
 	bytesRead = dataSocket.receive_from(buffer(buf, sizeof(buf)), sender);
 	if (bytesRead > 0)
 	{
 		natnet_packet_t* msg = reinterpret_cast<natnet_packet_t*>(&buf[0]);
-		std::cout << "[Data] Received data from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
+		std::cerr << "[Data] Received data from " << sender.address().to_string() << ": Type=" << msg->header.type << ", Size=" << msg->header.sz << "\n";
 	}
 }

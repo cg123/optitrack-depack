@@ -6,7 +6,7 @@
 
 class NatNetClient {
 public:
-    NatNetClient();
+    NatNetClient(uint32_t addr);
 	~NatNetClient();
     
 	void SendPacket(uint32_t host, natnet_packet_t* msg);
