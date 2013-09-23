@@ -14,6 +14,6 @@
 #define IMPORT
 #endif
 
-#define EXPORT_FUNC(type) extern EXPORT "C" type __cdecl
+#define EXPORT_FUNC(type) extern "C" EXPORT  type __cdecl
 
 #endif//OPTITRACK_API_H_

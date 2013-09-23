@@ -1,6 +1,5 @@
 #include "client.h"
-
-#define EXPORT_FUNC(__type__) extern "C" __type__ __cdecl
+#include "api.h"
 
 EXPORT_FUNC(NatNetClient*) natnetclient_init() {
     return new NatNetClient();
