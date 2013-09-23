@@ -11,5 +11,5 @@ if (WIN32)
     add_definitions(-D_WIN32_WINNT=0x0501)
 endif(WIN32)
 
-add_library(optitrack-depack SHARED depack.cc client.cc)
+add_library(optitrack-depack SHARED depack.cc client.cc unityfuncs.cc)
 target_link_libraries(optitrack-depack ${Boost_LIBRARIES})
